@@ -13,4 +13,4 @@ const findUserbyEmail = async (email) => {
     return result.rows[0];
 };
 
-module.exports = { createUser, findUserByEmail };
+module.exports = { createUser, findUserbyEmail };

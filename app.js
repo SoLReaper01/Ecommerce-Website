@@ -11,6 +11,14 @@ app.get("/", (req, res) => {
   res.send("Team 4 ecommerce project is running");
 });
 
+//Enable Cookies
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+//authRoutes Test
+const authRoutes = require('./server/routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -32,6 +40,3 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
-//Enable Cookies
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
