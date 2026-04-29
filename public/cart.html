@@ -7,34 +7,42 @@
 
 <body>
 
-  <h1>Your Cart</h1>
-
   <nav>
-    <a href="index.html">Home</a>
-    <a href="products.html">Products</a>
-    <a href="cart.html">Cart</a>
+    <div class="logo">TEAM 4</div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="products.html">Shop</a>
+      <a href="cart.html">Cart</a>
+    </div>
   </nav>
 
-  <hr>
+  <section class="section">
+    <h2>Your Cart</h2>
 
-  <div class="cart-item">
-    <h3>T-Shirt</h3>
-    <p>Price: $20</p>
-    <p>Quantity: 1</p>
-  </div>
+    <div class="cart-item">
+      <h3>Basic Tee</h3>
+      <p>$25</p>
+      <p>Quantity: 1</p>
+    </div>
 
-  <div class="cart-item">
-    <h3>Hoodie</h3>
-    <p>Price: $40</p>
-    <p>Quantity: 1</p>
-  </div>
+    <div class="cart-item">
+      <h3>Minimal Hoodie</h3>
+      <p>$55</p>
+      <p>Quantity: 1</p>
+    </div>
 
-  <hr>
+    <div class="cart-summary">
+      <h3>Total: $80</h3>
+      <button onclick="checkout()">Checkout</button>
+    </div>
 
-  <h2>Total: $60</h2>
+  </section>
 
-  <button>Checkout</button>
+  <footer>
+    <p>Team 4 E-Commerce Project</p>
+  </footer>
 
   <script src="js/cart.js"></script>
 </body>
+</html>
 </html>
