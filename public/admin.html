@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <h1>Admin Dashboard</h1>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="cart.html">Cart</a>
+    <a href="orders.html">Orders</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+
+  <hr>
+
+  <section>
+    <h2>Manage Products</h2>
+
+    <form>
+      <label>Product Name:</label><br>
+      <input type="text" placeholder="Product name"><br><br>
+
+      <label>Price:</label><br>
+      <input type="number" placeholder="Product price"><br><br>
+
+      <label>Description:</label><br>
+      <textarea placeholder="Product description"></textarea><br><br>
+
+      <button type="button">Add Product</button>
+    </form>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Customer Orders</h2>
+
+    <div class="order">
+      <h3>Order #1001</h3>
+      <p>Customer: John Doe</p>
+      <p>Total: $60</p>
+      <p>Status: Processing</p>
+      <button type="button">Update Status</button>
+    </div>
+  </section>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

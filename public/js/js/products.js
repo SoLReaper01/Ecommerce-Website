@@ -1,1 +1,3 @@
-console.log("Products JS loaded");
+function addToCart(productName) {
+  alert(productName + " added to cart!");
+}
