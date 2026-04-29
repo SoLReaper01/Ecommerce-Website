@@ -40,3 +40,7 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
+//Debug
+console.log("DB USER:", process.env.DB_USER);
+console.log("DB PASS:", process.env.DB_PASSWORD);
+

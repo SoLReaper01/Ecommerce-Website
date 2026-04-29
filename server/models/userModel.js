@@ -1,9 +1,9 @@
 const pool = require('../db');
 
-const createUser = async (email, password, role) => {
+const createUser = async (email, password_hash, role) => {
     const result = await pool.query(
-        'INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING *',
-        [email, password, role]
+        'INSERT INTO users (email, password_hash, role) VALUES ($1, $2, $3) RETURNING *',
+        [email, password_hash, role]
     );
     return result.rows[0];
 };

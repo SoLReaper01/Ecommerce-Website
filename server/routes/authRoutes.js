@@ -10,7 +10,7 @@ const router = express.Router();
 //Register Route
 router.post('/register', async (req, res) => {
     console.log('BODY', req.body);
-    const { email, password, role } = req.body;
+    const { email, password_hash, role } = req.body;
 
     try {
         const existingUser = await findUserbyEmail(email);
@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({message: 'User already exists'})
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password_hash, 10);
 
     const user = await createUser(email, hashedPassword, role || 'customer');
 
@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
 
 //Login Route
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password_hash } = req.body;
 
     try {
         const user = await findUserbyEmail(email);
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials'});
         }
         
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password_hash, user.password_hash);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials'});
         } 
