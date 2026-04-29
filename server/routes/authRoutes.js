@@ -26,3 +26,45 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ error: err.message });
     }
 });
+
+//Login Route
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await findUserByEmail(email);
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials'});
+        }
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid credentials'});
+        } 
+        
+        const token = jwt.sign(
+            { id: user.id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.cookie('token', token, { httpOnly: true });
+
+        res.json({ message: 'Logged in'});
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+//Logout Route
+router.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ mesage: 'Logged out' });
+});
+
+//Protected Route
+router.get('profile', authenticate, (req, res) => {
+    res.json({ message: 'Profile date', user: req.user });
+});
+
+module.exports = router;
