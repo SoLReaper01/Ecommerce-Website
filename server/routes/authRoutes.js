@@ -1,71 +1,96 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const { createUser, findUserbyEmail } = require('../models/userModel')
-const { authenticate, authorize } = require('../middleware/authMiddleware')
+const { createUser, findUserByEmail } = require("../models/userModel");
+// If your userModel is in a top-level /models folder instead, use:
+// const { createUser, findUserByEmail } = require("../../models/userModel");
+
+const { authenticate } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-//Register Route
-router.post('/register', async (req, res) => {
-    console.log('BODY', req.body);
-    const { email, password, role } = req.body;
+// Register Route
+router.post("/register", async (req, res) => {
+  const { name, email, phone, password } = req.body;
 
-    try {
-        const existingUser = await findUserbyEmail(email);
-        if (existingUser) {
-            return res.status(400).json({message: 'User already exists'})
+  try {
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        message: "Name, email, and password are required"
+      });
+    }
+
+    const existingUser = await findUserByEmail(email);
+
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await createUser(email, hashedPassword, role || 'customer');
+    const user = await createUser(
+      name,
+      email,
+      phone || null,
+      hashedPassword,
+      "customer"
+    );
 
-    res.status(201).json({ message: 'User created', user });
-    } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(201).json({
+      message: "User created",
+      user
+    });
+  } catch (err) {
+    console.error("REGISTER ERROR:", err);
+    res.status(500).json({ error: err.message || "Unknown server error" });
+  }
+});
+
+// Login Route
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-});
 
-//Login Route
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const isMatch = await bcrypt.compare(password, user.password_hash);
 
-    try {
-        const user = await findUserbyEmail(email);
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials'});
-        }
-        
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials'});
-        } 
-        
-        const token = jwt.sign(
-            { id: user.id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: '1d' }
-        );
-
-        res.cookie('token', token, { httpOnly: true });
-
-        res.json({ message: 'Logged in'});
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
+
+    const token = jwt.sign(
+      { id: user.id, role: user.role, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax"
+    });
+
+    res.json({ message: "Logged in" });
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+    res.status(500).json({ error: err.message || "Unknown server error" });
+  }
 });
 
-//Logout Route
-router.post('/logout', (req, res) => {
-    res.clearCookie('token');
-    res.json({ mesage: 'Logged out' });
+// Logout Route
+router.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "Logged out" });
 });
 
-//Protected Route
-router.get('/profile', authenticate, (req, res) => {
-    res.json({ message: 'Profile date', user: req.user });
+// Protected Route
+router.get("/profile", authenticate, (req, res) => {
+  res.json({ message: "Profile data", user: req.user });
 });
 
 module.exports = router;
