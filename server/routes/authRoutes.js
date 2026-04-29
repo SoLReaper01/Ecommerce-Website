@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { createUser, findUserByEmail } = require('../models/userModel')
+const { createUser, findUserbyEmail } = require('../models/userModel')
 const { authenticate, authorize } = require('../middleware/authMiddleware')
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.post('/register', async (req, res) => {
     const { email, password, role } = req.body;
 
     try {
-        const existingUser = await findUserByEmail(email);
+        const existingUser = await findUserbyEmail(email);
         if (existingUser) {
             return res.status(400).json({message: 'User already exists'})
     }
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await findUserByEmail(email);
+        const user = await findUserbyEmail(email);
         if (!user) {
             return res.status(400).json({ message: 'Invalid credentials'});
         }
