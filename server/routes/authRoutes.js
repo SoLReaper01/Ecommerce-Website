@@ -63,7 +63,7 @@ router.post('/logout', (req, res) => {
 });
 
 //Protected Route
-router.get('profile', authenticate, (req, res) => {
+router.get('/profile', authenticate, (req, res) => {
     res.json({ message: 'Profile date', user: req.user });
 });
 

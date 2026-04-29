@@ -31,3 +31,7 @@ app.get("/test-db", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+//Enable Cookies
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
