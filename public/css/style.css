@@ -150,3 +150,37 @@ footer {
   padding: 20px;
   margin-top: 40px;
 }
+/* NAV HOVER */
+nav a:hover {
+  color: #666;
+  text-decoration: underline;
+}
+
+/* BUTTON HOVER */
+button:hover,
+.btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+/* PRODUCT CARD HOVER */
+.product {
+  transition: all 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* CART/ORDER CARD HOVER */
+.cart-item,
+.order {
+  transition: all 0.2s ease;
+}
+
+.cart-item:hover,
+.order:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
