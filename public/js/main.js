@@ -1,7 +1,13 @@
 console.log("Main site loaded");
+const page = window.location.pathname;
+console.log("Current page:", page);
 
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+//Register Form
+if (page.includes("register.html")) {
+  const registerForm = document.getElementById("registerForm");
+
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
   const form = e.target;
 
@@ -27,13 +33,17 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   } else {
     alert(data.message || "Registration failed");
   }
-  console.log(data);
 });
+}
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+// Login Form
+if (page.includes("login.html")) {
+  const loginForm = document.getElementById("loginForm");
 
-  const username = document.getElementById("loginUsername").value;
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+  const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
   const res = await fetch("http://localhost:3000/api/auth/login", {
@@ -41,23 +51,24 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ username, password })
+    credentials: "include",
+    body: JSON.stringify({ email, password })
   });
 
   const data = await res.json();
 
-  // Save JWT token
-  localStorage.setItem("token", data.token);
-
-  console.log("Logged in!");
-});
-
-localStorage.setItem("token", data.token);
-
-const token = localStorage.getItem("token");
-
-fetch("http://localhost:3000/api/protected", {
-  headers: {
-    Authorization: `Bearer ${token}`
+  if (res.ok) {
+    console.log("LOGIN SUCCESS HIT");
+    alert("Logged in!");
+    window.location.href = "index.html";
+  } else {
+    alert(data.message || "Login failed");
   }
 });
+}
+
+fetch("http://localhost:3000/api/auth/profile", {
+  credentials: "include"
+})
+  .then(res => res.json())
+  .then(data => console.log(data));
