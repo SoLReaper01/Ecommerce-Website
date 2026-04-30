@@ -1,5 +1,6 @@
 const pool = require('../db');
 
+// Create user function
 const createUser = async (name, email, phone, passwordHash, role = "customer") => {
   const result = await pool.query(
     `
@@ -13,6 +14,7 @@ const createUser = async (name, email, phone, passwordHash, role = "customer") =
   return result.rows[0];
 };
 
+// Find user by email function
 const findUserByEmail = async (email) => {
   const result = await pool.query(
     "SELECT * FROM users WHERE email = $1",

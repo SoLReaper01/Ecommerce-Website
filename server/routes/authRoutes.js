@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { createUser, findUserByEmail } = require("../models/userModel");
-// If your userModel is in a top-level /models folder instead, use:
-// const { createUser, findUserByEmail } = require("../../models/userModel");
 
 const { authenticate } = require("../middleware/authMiddleware");
 

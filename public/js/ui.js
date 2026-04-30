@@ -15,11 +15,12 @@ function setupNavbar() {
     .then(data => {
       console.log("Logged in user:", data);
 
+      // Show logout and hide login/register
       if (loginLink) loginLink.style.display = "none";
       if (registerLink) registerLink.style.display = "none";
       if (logoutLink) logoutLink.style.display = "inline";
 
-      // Show admin link only if user is admin
+      // Show admin button only if user is admin
       if (adminLink) {
         if (data.user.role === "admin") {
           adminLink.style.display = "inline";
@@ -42,6 +43,8 @@ function setupNavbar() {
         });
       }
     })
+
+    // Shows login and register buttons plus hides logout and admin by default
     .catch(() => {
       console.log("User not logged in");
 
