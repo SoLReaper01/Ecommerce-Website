@@ -68,13 +68,13 @@ if (page.includes("login.html")) {
     });
 }
 
-//Logout Functionality
+//Logout and Admin Functionality
 const loginLink = document.getElementById("loginLink");
 const registerLink = document.getElementById("registerLink");
 const logoutLink = document.getElementById("logoutLink");
 const adminLink = document.getElementById("adminLink");
 
-fetch("http://localhost:3000/api/auth/profile", {
+fetch("http://localhost:3000/api/auth/profile", { //checks if a user is logged in
   credentials: "include"
 })
   .then(res => {
@@ -84,10 +84,12 @@ fetch("http://localhost:3000/api/auth/profile", {
   .then(data => {
     console.log("Logged in user:", data);
 
+    //hide login and register plus show logout if user is logged in
     if (loginLink) loginLink.style.display = "none";
     if (registerLink) registerLink.style.display = "none";
     if (logoutLink) logoutLink.style.display = "inline";
 
+    //shows admin button if user is an admin
     if (adminLink) {
         if (data.user.role === "admin") {
             adminLink.style.display = "inline";
@@ -96,6 +98,7 @@ fetch("http://localhost:3000/api/auth/profile", {
         }
     }
 
+    //logs out user
     if (logoutLink) {
       logoutLink.addEventListener("click", async (e) => {
         e.preventDefault();
@@ -110,6 +113,8 @@ fetch("http://localhost:3000/api/auth/profile", {
       });
     }
   })
+
+  //shows login and register if no user is logged in.
   .catch(() => {
     console.log("User not logged in");
 
