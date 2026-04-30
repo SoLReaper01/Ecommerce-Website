@@ -72,6 +72,7 @@ if (page.includes("login.html")) {
 const loginLink = document.getElementById("loginLink");
 const registerLink = document.getElementById("registerLink");
 const logoutLink = document.getElementById("logoutLink");
+const adminLink = document.getElementById("adminLink");
 
 fetch("http://localhost:3000/api/auth/profile", {
   credentials: "include"
@@ -86,6 +87,14 @@ fetch("http://localhost:3000/api/auth/profile", {
     if (loginLink) loginLink.style.display = "none";
     if (registerLink) registerLink.style.display = "none";
     if (logoutLink) logoutLink.style.display = "inline";
+
+    if (adminLink) {
+        if (data.user.role === "admin") {
+            adminLink.style.display = "inline";
+        } else {
+            adminLink.style.display = "none";
+        }
+    }
 
     if (logoutLink) {
       logoutLink.addEventListener("click", async (e) => {
@@ -107,4 +116,5 @@ fetch("http://localhost:3000/api/auth/profile", {
     if (loginLink) loginLink.style.display = "inline";
     if (registerLink) registerLink.style.display = "inline";
     if (logoutLink) logoutLink.style.display = "none";
+    if (adminLink) adminLink.style.display = "none";
   });
