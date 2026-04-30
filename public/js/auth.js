@@ -60,6 +60,9 @@ function initLogin() {
     if (res.ok) {
       console.log("LOGIN SUCCESS HIT");
       alert("Logged in!");
+
+      localStorage.setItem("token", data.token);
+      
       window.location.href = "index.html";
       
     } else {

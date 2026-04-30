@@ -27,23 +27,50 @@
   <hr>
 
   <section>
-    <h2>Manage Products</h2>
+    <h2>Add Products</h2>
 
-    <form>
+    <form id="addProductForm">
       <label>Product Name:</label><br>
-      <input type="text" placeholder="Product name"><br><br>
+      <input type="text" id="name"><br><br>
 
       <label>Price:</label><br>
-      <input type="number" placeholder="Product price"><br><br>
+      <input type="number" id="price"><br><br>
 
       <label>Description:</label><br>
-      <textarea placeholder="Product description"></textarea><br><br>
+      <textarea id="description"></textarea><br><br>
 
-      <button type="button">Add Product</button>
+      <label>Category:</label><br>
+      <input type="text" id="category"><br><br>
+
+      <label>Color:</label><br>
+      <input type="text" id="color"><br><br>
+
+      <label>Stock:</label><br>
+      <input type="number" id="stock"><br><br>
+
+      <button type="submit">Add Product</button>
     </form>
   </section>
 
   <hr>
+
+  <section class="section">
+    <h2>All Products</h2>
+    <div id="adminProductList"></div>
+  </section>
+  
+  <template id="productTemplate">
+    <div class="admin-product">
+      <h3 class="name"></h3>
+      <p class="description"></p>
+      <p class="price"></p>
+      <p class="stock"></p>
+      <p class="category"></p>
+      <p class="color"></p>
+      <button class="deleteBtn">Delete</button>
+      <hr>
+    </div>
+   </template>
 
   <section>
     <h2>Customer Orders</h2>
@@ -59,6 +86,8 @@
 
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/admin.js"></script>
   <script src="js/main.js"></script>
+
 </body>
 </html>
