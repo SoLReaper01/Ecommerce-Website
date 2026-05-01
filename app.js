@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./server/routes/authRoutes");
 const adminRoutes = require("./server/routes/adminRoutes");
 const productRoutes = require("./server/routes/productRoutes");
+const cartRoutes = require("./server/routes/cartRoutes");
+const orderRoutes = require("./server/routes/orderRoutes");
 const pool = require("./server/db");
 
 const app = express();
@@ -24,6 +26,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/test-db", async (req, res) => {
   try {
