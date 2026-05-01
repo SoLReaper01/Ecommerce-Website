@@ -1,3 +1,7 @@
+// Load products on page load
+loadProducts();
+
+// Get all products
 async function loadProducts() {
   try {
     const res = await fetch("http://localhost:3000/api/products");
@@ -5,21 +9,26 @@ async function loadProducts() {
 
     const grid = document.getElementById("productGrid");
 
-    grid.innerHTML = ""; // clear anything
+    grid.innerHTML = "";
+
+    const template = document.getElementById("productTemplate");
 
     data.products.forEach(product => {
-      const div = document.createElement("div");
-      div.classList.add("product");
+      const clone = template.content.cloneNode(true);
 
-      div.innerHTML = `
-        <img src="${product.image_url || 'images/default.jpg'}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>${product.description || ""}</p>
-        <p class="price">$${product.price}</p>
-        <button onclick="addToCart('${product.id}')">Add to Cart</button>
-      `;
+      const img = clone.querySelector(".productImage");
+      img.src = product.image_url || "images/default.jpg";
+      img.alt = product.name;
 
-      grid.appendChild(div);
+      clone.querySelector(".productName").textContent = product.name;
+      clone.querySelector(".productDescription").textContent = product.description || "";
+      clone.querySelector(".productPrice").textContent = `$${product.price}`;
+
+      clone.querySelector(".addToCartBtn").addEventListener("click", () => {
+        addToCart(product.id);
+      });
+
+      grid.appendChild(clone);
     });
 
   } catch (err) {
@@ -27,7 +36,7 @@ async function loadProducts() {
   }
 }
 
-
+// Add product to cart
 async function addToCart(productId) {
   try {
     const res = await fetch("http://localhost:3000/api/cart/add", {
@@ -59,8 +68,4 @@ async function addToCart(productId) {
     console.error("Add to cart error:", err);
     alert("Error adding to cart");
   }
-}
-// Run only on products page
-if (window.location.pathname.includes("products.html")) {
-  loadProducts();
 }

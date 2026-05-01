@@ -1,7 +1,6 @@
-console.log("Main site loaded");
+// Main JavaScript file to initialize page-specific logic
 
 const page = window.location.pathname;
-console.log("Current page:", page);
 
 if (page.includes("register.html")) {
   initRegister();

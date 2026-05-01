@@ -1,12 +1,14 @@
-console.log("Admin page loaded");
+// Admin dashboard initialization
 loadProducts();
 loadOrders();
 initAdmin();
+
 
 function initAdmin() {
   const form = document.getElementById("addProductForm");
   if (!form) return;
 
+// Add new Product
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -82,12 +84,70 @@ function renderProducts(products) {
     clone.querySelector(".color").textContent =
       "Color: " + (p.color || "N/A");
 
+    clone.querySelector(".editBtn").addEventListener("click", () => {
+      editProduct(p);
+    });
     clone.querySelector(".deleteBtn").addEventListener("click", () => {
       deleteProduct(p.id);
     });
 
     container.appendChild(clone);
   });
+}
+
+// Edit product details
+async function editProduct(product) {
+  const name = prompt("Product name:", product.name);
+  if (name === null) return;
+
+  const price = prompt("Price:", product.price);
+  if (price === null) return;
+
+  const description = prompt("Description:", product.description || "");
+  if (description === null) return;
+
+  const category = prompt("Category:", product.category || "");
+  if (category === null) return;
+
+  const color = prompt("Color:", product.color || "");
+  if (color === null) return;
+
+  const stock = prompt("Stock:", product.stock);
+  if (stock === null) return;
+
+  const updatedProduct = {
+    name,
+    price: parseFloat(price),
+    description,
+    category,
+    color,
+    stock: parseInt(stock) || 0
+  };
+
+  try {
+    const res = await fetch(`/api/admin/products/${product.id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedProduct)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Error updating product");
+      return;
+    }
+
+    alert("Product updated!");
+    loadProducts();
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
 }
 
 // Delete product

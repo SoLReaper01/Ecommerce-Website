@@ -1,3 +1,7 @@
+// Load user's orders on page load
+loadOrders();
+
+// Get all orders
 async function loadOrders() {
   try {
     const res = await fetch("http://localhost:3000/api/orders", {
@@ -13,6 +17,7 @@ async function loadOrders() {
     }
 
     const container = document.getElementById("ordersContainer");
+    
     container.innerHTML = "";
 
     if (orders.length === 0) {
@@ -20,22 +25,23 @@ async function loadOrders() {
       return;
     }
 
+    const template = document.getElementById("orderTemplate");
+
     orders.forEach(order => {
-      const div = document.createElement("div");
-      div.className = "order";
+      const clone = template.content.cloneNode(true);
 
       const itemsText = order.items
-        ? order.items.map(item => item.name).join(", ")
+        ? order.items
+            .map(item => `${item.name} x${item.quantity} - $${item.price}`)
+            .join(", ")
         : "N/A";
 
-      div.innerHTML = `
-        <h3>Order #${order.id}</h3>
-        <p>Items: ${itemsText}</p>
-        <p>Total: $${order.total}</p>
-        <p>Status: ${order.status}</p>
-      `;
+      clone.querySelector(".orderId").textContent = `Order #${order.id}`;
+      clone.querySelector(".orderItems").textContent = `Items: ${itemsText}`;
+      clone.querySelector(".orderTotal").textContent = `Total: $${order.total}`;
+      clone.querySelector(".orderStatus").textContent = `Status: ${order.status}`;
 
-      container.appendChild(div);
+      container.appendChild(clone);
     });
 
   } catch (err) {
@@ -43,5 +49,3 @@ async function loadOrders() {
     alert("Error loading orders");
   }
 }
-
-loadOrders();

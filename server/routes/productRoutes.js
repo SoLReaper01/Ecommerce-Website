@@ -1,3 +1,4 @@
+// Product routes for listing products, searching, filtering, and getting product details
 const express = require("express");
 const {
   getAllProducts,

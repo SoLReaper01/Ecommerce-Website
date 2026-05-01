@@ -1,9 +1,12 @@
+// Authentication routes for user registration, login, logout, and profile access
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// Import user model functions
 const { createUser, findUserByEmail } = require("../models/userModel");
 
+// Import authentication middleware
 const { authenticate } = require("../middleware/authMiddleware");
 
 const router = express.Router();

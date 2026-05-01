@@ -1,3 +1,4 @@
+// Admin routes for product management and order management
 const express = require("express");
 const pool = require("../db");
 const { authenticate, authorize } = require("../middleware/authMiddleware");
@@ -8,7 +9,7 @@ const router = express.Router();
 router.use(authenticate);
 router.use(authorize(["admin"]));
 
-// Optional: get all products for admin dashboard
+// Get all products (for admin dashboard)
 router.get("/products", async (req, res) => {
   try {
     const result = await pool.query(
@@ -60,52 +61,23 @@ router.post("/products", async (req, res) => {
 
 // Edit product
 router.put("/products/:id", async (req, res) => {
+  const { name, price, description, category, color, stock } = req.body;
   const { id } = req.params;
-  const {
-    name,
-    description,
-    category,
-    color,
-    price,
-    stock,
-    image_url
-  } = req.body;
 
   try {
-    const result = await pool.query(
-      `
-      UPDATE products
-      SET
-        name = COALESCE($1, name),
-        description = COALESCE($2, description),
-        category = COALESCE($3, category),
-        color = COALESCE($4, color),
-        price = COALESCE($5, price),
-        stock = COALESCE($6, stock),
-        image_url = COALESCE($7, image_url)
-      WHERE id = $8
-      RETURNING *
-      `,
-      [
-        name ?? null,
-        description ?? null,
-        category ?? null,
-        color ?? null,
-        price ?? null,
-        stock ?? null,
-        image_url ?? null,
-        id
-      ]
+    await pool.query(
+      `UPDATE products
+       SET name = $1,
+           price = $2,
+           description = $3,
+           category = $4,
+           color = $5,
+           stock = $6
+       WHERE id = $7`,
+      [name, price, description, category, color, stock, id]
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.json({
-      message: "Product updated successfully",
-      product: result.rows[0]
-    });
+    res.json({ message: "Product updated" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

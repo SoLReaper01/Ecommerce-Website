@@ -1,3 +1,4 @@
+// Checout page functionality
 async function placeOrder() {
   const name = document.querySelector("input[placeholder='Full name']").value;
   const address = document.querySelector("input[placeholder='Street address']").value;

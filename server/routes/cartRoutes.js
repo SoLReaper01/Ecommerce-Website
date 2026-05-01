@@ -1,3 +1,4 @@
+// Cart routes for managing user's shopping cart (add, update, remove items, view cart)
 const express = require("express");
 const pool = require("../db");
 const { authenticate } = require("../middleware/authMiddleware");

@@ -1,3 +1,4 @@
+// User model for database interactions
 const pool = require('../db');
 
 // Create user function

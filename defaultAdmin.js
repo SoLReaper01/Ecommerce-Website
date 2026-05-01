@@ -1,3 +1,4 @@
+// Script to create a default Admin account
 const pool = require("./server/db");
 const bcrypt = require("bcrypt");
 
@@ -19,6 +20,7 @@ async function defaultAdmin() {
     return;
   }
 
+  // Creates the Admin account
   await pool.query(
     `
     INSERT INTO users (name, email, password_hash, role)

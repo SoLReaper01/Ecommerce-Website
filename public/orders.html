@@ -15,7 +15,7 @@
       <a href="index.html">Home</a>
       <a href="products.html">Shop</a>
       <a href="cart.html">Cart</a>
-      <a href="orders.html">Orders</a>
+      <a href="orders.html" id="ordersLink" style="display:none;">Orders</a>
       <a href="login.html" id="loginLink">Login</a>
       <a href="register.html" id="registerLink">Register</a>
       <a href="#" id="logoutLink" style="display:none;">Logout</a>
@@ -26,6 +26,15 @@
   <hr>
 
   <div id="ordersContainer"></div>
+
+  <template id="orderTemplate">
+    <div class="order">
+      <h3 class="orderId"></h3>
+      <p class="orderItems"></p>
+      <p class="orderTotal"></p>
+      <p class="orderStatus"></p>
+    </div>
+  </template>
 
   <script src="js/orders.js"></script>
   <script src="js/auth.js"></script>

@@ -1,5 +1,7 @@
+// Middleware for authentication and authorization
 const jwt = require("jsonwebtoken");
 
+// Authenticate user by verifying JWT token
 const authenticate = (req, res, next) => {
   const token = req.cookies?.token;
 
@@ -16,6 +18,7 @@ const authenticate = (req, res, next) => {
   }
 };
 
+// Authorize user based on role
 const authorize = (roles = []) => { 
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {

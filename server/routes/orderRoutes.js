@@ -1,3 +1,4 @@
+// Order routes for checkout and order history
 const express = require("express");
 const pool = require("../db");
 const { authenticate } = require("../middleware/authMiddleware");
@@ -29,16 +30,19 @@ router.post("/checkout", async (req, res) => {
       [req.user.id]
     );
 
+    // If cart is empty, return error
     if (cartItems.rows.length === 0) {
       await client.query("ROLLBACK");
       return res.status(400).json({ message: "Cart is empty" });
     }
 
+    // Calculate total and create order
     let total = 0;
     for (let item of cartItems.rows) {
       total += item.price * item.quantity;
     }
 
+    // Create order
     const order = await client.query(
       `INSERT INTO orders (user_id, total, shipping_address)
       VALUES ($1, $2, $3)
@@ -49,19 +53,36 @@ router.post("/checkout", async (req, res) => {
     const orderId = order.rows[0].id;
 
     for (let item of cartItems.rows) {
+      const stockUpdate = await client.query(
+        `UPDATE products
+        SET stock = stock - $1
+        WHERE id = $2 AND stock >= $1
+        RETURNING stock`,
+        [item.quantity, item.product_id]
+      );
+
+      if (stockUpdate.rows.length === 0) {
+        await client.query("ROLLBACK");
+        return res.status(400).json({
+          message: "Not enough stock for one or more items"
+        });
+      }
+
       await client.query(
         `INSERT INTO order_items (order_id, product_id, quantity, price)
-         VALUES ($1, $2, $3, $4)`,
+        VALUES ($1, $2, $3, $4)`,
         [orderId, item.product_id, item.quantity, item.price]
       );
     }
 
+    // Clear cart
     await client.query(
       `DELETE FROM cart_items
        WHERE cart_id = (SELECT id FROM carts WHERE user_id = $1)`,
       [req.user.id]
     );
 
+    // Commit transaction
     await client.query("COMMIT");
 
     res.json({ message: "Order placed", orderId });
@@ -74,7 +95,7 @@ router.post("/checkout", async (req, res) => {
   }
 });
 
-
+// Get user's order history
 router.get("/", async (req, res) => {
   try {
     const orders = await pool.query(

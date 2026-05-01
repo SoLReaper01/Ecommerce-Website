@@ -1,19 +1,18 @@
-const API = "/api/cart";
-// Load cart on page load
+// Load User's cart on page load
 loadCart();
 
+// Get all cart items
 async function loadCart() {
   try {
-    const res = await fetch("http://localhost:3000/api/cart", {
+    const res = await fetch("/api/cart", {
       credentials: "include"
     });
 
     const data = await res.json();
 
-    console.log("FULL RESPONSE:", data);
-
     const container = document.getElementById("cartContainer");
     const totalEl = document.getElementById("cartTotal");
+    const cartSummary = document.getElementById("cartSummary");
 
     container.innerHTML = "";
 
@@ -23,30 +22,38 @@ async function loadCart() {
       } else {
         container.innerHTML = `<p>${data.message || "Error loading cart"}</p>`;
       }
+
+      if (cartSummary) cartSummary.style.display = "none";
       return;
     }
 
+    if (cartSummary) cartSummary.style.display = "block";
+
     let total = 0;
 
+    const template = document.getElementById("cartItemTemplate");
+
     data.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "cart-item";
+      const clone = template.content.cloneNode(true);
 
       const itemTotal = item.price * item.quantity;
       total += itemTotal;
 
-      div.innerHTML = `
-        <h3>${item.name}</h3>
-        <p>$${item.price}</p>
-        <p>
-          Quantity: 
-          <input type="number" value="${item.quantity}" min="1"
-            onchange="updateQuantity(${item.id}, this.value)">
-        </p>
-        <button onclick="removeItem(${item.id})">Remove</button>
-      `;
+      clone.querySelector(".cartName").textContent = item.name;
+      clone.querySelector(".cartPrice").textContent = `$${item.price}`;
 
-      container.appendChild(div);
+      const quantityInput = clone.querySelector(".cartQuantity");
+      quantityInput.value = item.quantity;
+
+      quantityInput.addEventListener("change", () => {
+        updateQuantity(item.id, quantityInput.value);
+      });
+
+      clone.querySelector(".removeBtn").addEventListener("click", () => {
+        removeItem(item.id);
+      });
+
+      container.appendChild(clone);
     });
 
     totalEl.textContent = `Total: $${total.toFixed(2)}`;
@@ -56,6 +63,7 @@ async function loadCart() {
   }
 }
 
+// Update item quantity in cart
 async function updateQuantity(id, quantity) {
   await fetch(`/api/cart/update/${id}`, {
     method: "PUT",
@@ -67,6 +75,7 @@ async function updateQuantity(id, quantity) {
   loadCart();
 }
 
+// Remove item from cart
 async function removeItem(id) {
   await fetch(`/api/cart/remove/${id}`, {
     method: "DELETE",
@@ -76,6 +85,7 @@ async function removeItem(id) {
   loadCart();
 }
 
+// Proceed to checkout page
 function checkout() {
   window.location.href = "checkout.html";
 }

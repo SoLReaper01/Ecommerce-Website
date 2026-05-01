@@ -1,9 +1,10 @@
-//Logout Functionality
+//Dynamic Navbar Functionality
 function setupNavbar() {
   const loginLink = document.getElementById("loginLink");
   const registerLink = document.getElementById("registerLink");
   const logoutLink = document.getElementById("logoutLink");
   const adminLink = document.getElementById("adminLink");
+  const ordersLink = document.getElementById("ordersLink");
 
   fetch("http://localhost:3000/api/auth/profile", {
     credentials: "include"
@@ -19,6 +20,7 @@ function setupNavbar() {
       if (loginLink) loginLink.style.display = "none";
       if (registerLink) registerLink.style.display = "none";
       if (logoutLink) logoutLink.style.display = "inline";
+      if (ordersLink) ordersLink.style.display = "inline";
 
       // Show admin button only if user is admin
       if (adminLink) {
@@ -29,6 +31,7 @@ function setupNavbar() {
         }
       }
 
+      // Logout functionality
       if (logoutLink) {
         logoutLink.addEventListener("click", async (e) => {
           e.preventDefault();
@@ -44,7 +47,7 @@ function setupNavbar() {
       }
     })
 
-    // Shows login and register buttons plus hides logout and admin by default
+    // Shows login and register buttons plus hides orders, logout, and admin by default
     .catch(() => {
       console.log("User not logged in");
 
@@ -52,5 +55,6 @@ function setupNavbar() {
       if (registerLink) registerLink.style.display = "inline";
       if (logoutLink) logoutLink.style.display = "none";
       if (adminLink) adminLink.style.display = "none";
+      if (ordersLink) ordersLink.style.display = "none";
     });
 }
