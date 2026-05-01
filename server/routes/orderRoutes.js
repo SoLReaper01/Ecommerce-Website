@@ -9,6 +9,12 @@ router.use(authenticate);
 
 // Checkout
 router.post("/checkout", async (req, res) => {
+  const { shipping_address } = req.body;
+
+  if (!shipping_address) {
+    return res.status(400).json({ message: "Shipping address required" });
+}
+
   const client = await pool.connect();
 
   try {
@@ -34,8 +40,10 @@ router.post("/checkout", async (req, res) => {
     }
 
     const order = await client.query(
-      "INSERT INTO orders (user_id, total) VALUES ($1, $2) RETURNING id",
-      [req.user.id, total]
+      `INSERT INTO orders (user_id, total, shipping_address)
+      VALUES ($1, $2, $3)
+      RETURNING id`,
+      [req.user.id, total, shipping_address]
     );
 
     const orderId = order.rows[0].id;
@@ -63,6 +71,40 @@ router.post("/checkout", async (req, res) => {
     res.status(500).json({ error: err.message });
   } finally {
     client.release();
+  }
+});
+
+
+router.get("/", async (req, res) => {
+  try {
+    const orders = await pool.query(
+      `SELECT * FROM orders
+       WHERE user_id = $1
+       ORDER BY created_at DESC`,
+      [req.user.id]
+    );
+
+    const result = [];
+
+    for (let order of orders.rows) {
+      const items = await pool.query(
+        `SELECT oi.*, p.name
+         FROM order_items oi
+         JOIN products p ON oi.product_id = p.id
+         WHERE oi.order_id = $1`,
+        [order.id]
+      );
+
+      result.push({
+        ...order,
+        items: items.rows
+      });
+    }
+
+    res.json(result);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
