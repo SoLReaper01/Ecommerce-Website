@@ -73,15 +73,31 @@
 
   <section>
     <h2>Customer Orders</h2>
-
-    <div class="order">
-      <h3>Order #1001</h3>
-      <p>Customer: John Doe</p>
-      <p>Total: $60</p>
-      <p>Status: Processing</p>
-      <button type="button">Update Status</button>
-    </div>
+    <div id="adminOrderList"></div>
   </section>
+
+  <template id="orderTemplate">
+    <div class="order">
+      <h3 class="orderId"></h3>
+      <p class="customer"></p>
+      <p class="email"></p>
+      <p class="address"></p>
+      <p class="total"></p>
+      <p class="status"></p>
+
+      <select class="statusSelect">
+        <option>Pending</option>
+        <option>Processing</option>
+        <option>Shipped</option>
+        <option>Delivered</option>
+        <option>Cancelled</option>
+      </select>
+
+      <button class="updateStatusBtn">Update Status</button>
+
+      <hr>
+    </div>
+  </template>
 
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
