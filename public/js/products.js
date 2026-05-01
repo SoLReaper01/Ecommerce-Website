@@ -16,7 +16,7 @@ async function loadProducts() {
         <h3>${product.name}</h3>
         <p>${product.description || ""}</p>
         <p class="price">$${product.price}</p>
-        <button onclick="addToCart('${product.name}')">Add to Cart</button>
+        <button onclick="addToCart('${product.id}')">Add to Cart</button>
       `;
 
       grid.appendChild(div);
@@ -27,6 +27,39 @@ async function loadProducts() {
   }
 }
 
+
+async function addToCart(productId) {
+  try {
+    const res = await fetch("http://localhost:3000/api/cart/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        productId: productId,
+        quantity: 1
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (res.status === 401) {
+        alert("Please log in to add to cart");
+      } else {
+        alert(data.message || "Failed to add to cart");
+      }
+      return;
+    }
+
+    alert("Added to cart!");
+
+  } catch (err) {
+    console.error("Add to cart error:", err);
+    alert("Error adding to cart");
+  }
+}
 // Run only on products page
 if (window.location.pathname.includes("products.html")) {
   loadProducts();
