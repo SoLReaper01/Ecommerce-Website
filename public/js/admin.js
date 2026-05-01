@@ -40,7 +40,7 @@ function initAdmin() {
 
       alert("Product added successfully!");
       form.reset();
-      window.location.reload();
+      loadProducts();
 
     } catch (err) {
       console.error(err);

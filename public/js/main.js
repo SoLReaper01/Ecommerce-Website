@@ -10,9 +10,6 @@ if (page.includes("login.html")) {
   initLogin();
 }
 
-if (page.includes("admin.html")) {
-  initAdmin();
-}
 
 // Always run navbar logic
 setupNavbar();
