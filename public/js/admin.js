@@ -47,7 +47,7 @@ function initAdmin() {
   });
 }
 
-// GET all products
+// Get all Products
 async function loadProducts() {
   try {
     const res = await fetch("/api/admin/products", {
@@ -116,6 +116,7 @@ async function deleteProduct(id) {
   }
 }
 
+// Get all Orders
 async function loadOrders() {
   try {
     const res = await fetch("/api/admin/orders", {
@@ -135,6 +136,7 @@ async function loadOrders() {
   }
 }
 
+// Render all Orders
 function renderOrders(orders) {
   const container = document.getElementById("adminOrderList");
   const template = document.getElementById("orderTemplate");
@@ -174,6 +176,7 @@ function renderOrders(orders) {
   });
 }
 
+// Update order status 
 async function updateOrderStatus(orderId, newStatus) {
   try {
     const res = await fetch(`/api/admin/orders/${orderId}/status`, {
@@ -193,7 +196,7 @@ async function updateOrderStatus(orderId, newStatus) {
     }
 
     alert("Status updated!");
-    loadOrders(); // refresh list
+    loadOrders();
 
   } catch (err) {
     console.error(err);
