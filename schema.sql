@@ -23,7 +23,7 @@ CREATE TABLE products (
     color VARCHAR(50),
     price NUMERIC(10,2) NOT NULL,
     stock INT NOT NULL DEFAULT 0,
-    image_url TEXT
+    image_url TEXT NULL DEFAULT 'images/default.jpeg'
 );
 --carts table
 CREATE TABLE carts (
