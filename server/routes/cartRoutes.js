@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
        JOIN carts c ON ci.cart_id = c.id
        JOIN products p ON ci.product_id = p.id
        WHERE c.user_id = $1
-       ORDER BY ci.id ASC',
+       ORDER BY ci.id ASC`,
       [req.user.id]
     );
 
