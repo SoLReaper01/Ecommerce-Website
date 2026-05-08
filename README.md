@@ -6,6 +6,7 @@ Make sure you have the following installed:
 Node.js
 pgAdmin
  (PostgreSQL database)
+
 Step 1: Set Up the Database
 Open pgAdmin
 
@@ -17,6 +18,7 @@ Make sure your PostgreSQL username is:
 
 postgres
 Note your database password (you will use it in the .env file)
+
 Step 2: Configure Environment Variables
 
 Create a file named .env in the root folder and add:
@@ -39,6 +41,7 @@ Step 3: Install Dependencies
 In your project folder, run:
 
 npm install
+
 Step 4: Initialize Default Admin
 
 Run:
@@ -52,6 +55,7 @@ Step 5: Start the Application
 Run:
 
 node app.js
+
 Step 6: Open the Website
 
 Open your browser and go to:
